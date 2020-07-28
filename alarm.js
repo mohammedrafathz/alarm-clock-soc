@@ -28,7 +28,7 @@ function stopAlarm(index) {
     btnStop.onclick = function () {
         alarmAudio.src = "";
         alertDis.hidden = true
-        alarmArr.stopped = true;
+        alarmArr[index].stopped = true;
     }
 }
 
@@ -43,19 +43,40 @@ addAlarm.onclick = function () {
 
 function renderTable() {
 
-    let html = ""
-    for (let i = 0; i < alarmArr.length; i++) {
-        const element = alarmArr[i];
-        html += `                <tr>
-    <td>${i + 1}</td>
-    <td>${element.label}</td>
-    <td>${element.dt}</td>
+    let html = "";
+    if (alarmArr.length > 0) {
+        for (let i = 0; i < alarmArr.length; i++) {
+            const element = alarmArr[i];
+            html += `<tr>
+        <td>${i + 1}</td>
+        <td>${element.label}</td>
+        <td>${element.dt}</td>
+        <td><button class="btn btn-sm btn-danger btn-delete"><i class="fa fa-trash"></i></button></td>
     </tr>`
+        }
+    } else {
+        html += `<tr>
+        <td colspan="10">Alarm list is empty</td>
+    </tr>`;
     }
 
     alarmTable.innerHTML = html
+    deleteAlarm();
 }
 
+
+function deleteAlarm() {
+    let btn = document.getElementsByClassName("btn-delete")
+    for (let j = 0; j < btn.length; j++) {
+        const item = btn[j];
+
+        item.onclick = function () {
+            console.log(j);
+            alarmArr.splice(j, 1)
+            renderTable();
+        }
+    }
+}
 
 let flag = true;
 function playSound() {
@@ -68,3 +89,4 @@ function playSound() {
 
 // playSound()
 renderTable();
+deleteAlarm();
